@@ -9,18 +9,15 @@ import Board._
   */
 case class Board(piecemap: Map[Pos, Piece]) {
 
-  override def toString: String = {
-    def fenSymbol(piece: Piece): Char = {
-      piece.role match {
-        case Rook => 'r'
-        case Knight => 'n'
-        case Bishop => 'b'
-        case Queen => 'q'
-        case King => 'k'
-        case Pawn => 'p'
-      }
+  def possibleMoves(piece: Piece): List[Move] ={
+    piece.role match {
+      case Pawn => ???
+      case role: Role if role.longRange => resolveMovesLongRange(piece)
+      case role: Role => resolveMovesShortRange(piece)
     }
+  }
 
+  override def toString: String = {
     (for (y <- (0 until BoardSize).reverse) yield {
       (for (x <- 0 until BoardSize) yield {
         piecemap.get(Pos(x, y)).fold(' ')(piece => FENNotation.symbol(piece))
@@ -39,12 +36,12 @@ object Board {
     val pieces = (0 until BoardSize) flatMap { x: Int =>
       Seq(
         //white in this row
-        (Pos(x, 0), Piece(White, initSeq(x))),
-        (Pos(x, 1), Piece(White, Pawn)),
+        (Pos(x, 0), Piece(Pos(x, 0), White, initSeq(x))),
+        (Pos(x, 1), Piece(Pos(x, 1), White, Pawn)),
 
         //black in this row
-        (Pos(x, BoardSize - 1), Piece(Black, initSeq(x))),
-        (Pos(x, BoardSize - 2), Piece(Black, Pawn))
+        (Pos(x, BoardSize - 1), Piece(Pos(x, BoardSize - 1), Black, initSeq(x))),
+        (Pos(x, BoardSize - 2), Piece(Pos(x, BoardSize - 2), Black, Pawn))
       )
     }
 

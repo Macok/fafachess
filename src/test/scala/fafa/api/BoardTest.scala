@@ -19,8 +19,8 @@ class BoardTest extends FlatSpec with Matchers {
         role <- charToRole.get(c.toLower)
       ) yield {
         val color = if (c.isLower) Black else White
-        val piece = Piece(color, role)
         val pos = Pos(cIndex, BoardSize - 1 - lineIndex)
+        val piece = Piece(pos, color, role)
 
         (pos, piece)
       }
