@@ -5,6 +5,7 @@ package fafa.api
   */
 sealed trait Color {
   def isWhite: Boolean
+  def unary_! : Color
 }
 
 object Color {

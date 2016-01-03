@@ -9,7 +9,21 @@ import Board._
   */
 case class Board(piecemap: Map[Pos, Piece]) {
 
-  def possibleMoves(piece: Piece): List[Move] ={
+  def resolveMovesShortRange(piece: Piece): List[Move] = {
+    val from = piece.pos
+
+    piece.role.mobilityVectors flatMap { vec =>
+      from.addVector(vec)
+    } filter { to =>
+      piecemap.get(to).forall(_.color == !piece.color)
+    } map {
+      Move(from, _)
+    }
+  }
+
+  def resolveMovesLongRange(piece: Piece): List[Move] = ???
+
+  def possibleMoves(piece: Piece): List[Move] = {
     piece.role match {
       case Pawn => ???
       case role: Role if role.longRange => resolveMovesLongRange(piece)

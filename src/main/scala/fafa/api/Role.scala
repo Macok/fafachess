@@ -1,6 +1,6 @@
 package fafa.api
 
-import Role._
+import MobilityVec._
 
 /**
   * Created by mac on 03.01.16.
@@ -12,10 +12,6 @@ sealed trait Role {
 }
 
 object Role {
-
-  case class MobilityVec(dx: Int, dy: Int)
-
-  implicit def tupleToMobilityVec(t: Tuple2[Int, Int]): MobilityVec = MobilityVec(t._1, t._2)
 
   case object Pawn extends Role {
     override def mobilityVectors: List[MobilityVec] = throw new Exception("Method not supported for Pawns")
