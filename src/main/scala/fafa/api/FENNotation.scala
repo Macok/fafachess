@@ -18,9 +18,7 @@ object FENNotation {
   def symbol(piece: Piece): Char = {
     val c = roleChars.get(piece.role).get
 
-    if (piece.color.isWhite)
-      c.toUpper
-    else
-      c
+    if (piece.color.isWhite) c.toUpper
+    else c
   }
 }

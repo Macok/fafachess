@@ -12,7 +12,7 @@ case class Board(piecemap: Map[Pos, Piece]) {
   def resolveMovesShortRange(piece: Piece): List[Move] = {
     val from = piece.pos
 
-    piece.role.mobilityVectors flatMap { vec =>
+    piece.role.mobilityVecs flatMap { vec =>
       from.addVector(vec)
     } filter { to =>
       piecemap.get(to).forall(_.color == !piece.color)
@@ -21,7 +21,28 @@ case class Board(piecemap: Map[Pos, Piece]) {
     }
   }
 
-  def resolveMovesLongRange(piece: Piece): List[Move] = ???
+  def resolveMovesLongRange(piece: Piece): List[Move] = {
+    val from = piece.pos
+
+    def nextMove(pos: Pos, color: Color, vec: MobilityVec): List[Move] =
+      pos.addVector(vec) match {
+        // field not in board
+        case None => Nil
+        // field occupied by friend
+        case Some(nextPos) if occupiedBy(nextPos, color) => Nil
+        // field occupied by enemy
+        case Some(nextPos) if occupiedBy(nextPos, !color) => List(Move(from, nextPos))
+        // field free
+        case Some(nextPos) => Move(from, nextPos) :: nextMove(nextPos, color, vec)
+      }
+
+    piece.role.mobilityVecs flatMap {
+      nextMove(from, piece.color, _)
+    }
+  }
+
+  def occupiedBy(pos: Pos, color: Color) =
+    piecemap.get(pos).exists(_.color == color)
 
   def possibleMoves(piece: Piece): List[Move] = {
     piece.role match {

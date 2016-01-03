@@ -6,7 +6,7 @@ import MobilityVec._
   * Created by mac on 03.01.16.
   */
 sealed trait Role {
-  def mobilityVectors: List[MobilityVec]
+  def mobilityVecs: List[MobilityVec]
 
   def longRange: Boolean
 }
@@ -14,13 +14,13 @@ sealed trait Role {
 object Role {
 
   case object Pawn extends Role {
-    override def mobilityVectors: List[MobilityVec] = throw new Exception("Method not supported for Pawns")
+    override def mobilityVecs: List[MobilityVec] = throw new Exception("Method not supported for Pawns")
 
     override def longRange: Boolean = throw new Exception("Method not supported for Pawns")
   }
 
   case object Rook extends Role {
-    override def mobilityVectors: List[MobilityVec] = List(
+    override def mobilityVecs: List[MobilityVec] = List(
       (1, 0),
       (0, 1),
       (-1, 0),
@@ -30,7 +30,7 @@ object Role {
   }
 
   case object Knight extends Role {
-    override def mobilityVectors: List[MobilityVec] = List(
+    override def mobilityVecs: List[MobilityVec] = List(
       (2, 1),
       (2, -1),
       (-2, 1),
@@ -44,7 +44,7 @@ object Role {
   }
 
   case object Bishop extends Role {
-    override def mobilityVectors: List[MobilityVec] = List(
+    override def mobilityVecs: List[MobilityVec] = List(
       (1, 1),
       (1, -1),
       (-1, 1),
@@ -54,13 +54,13 @@ object Role {
   }
 
   case object Queen extends Role {
-    override def mobilityVectors: List[MobilityVec] = Bishop.mobilityVectors ++ Rook.mobilityVectors
+    override def mobilityVecs: List[MobilityVec] = Bishop.mobilityVecs ++ Rook.mobilityVecs
 
     override def longRange: Boolean = true
   }
 
   case object King extends Role {
-    override def mobilityVectors: List[MobilityVec] = Queen.mobilityVectors
+    override def mobilityVecs: List[MobilityVec] = Queen.mobilityVecs
 
     override def longRange: Boolean = false
   }
