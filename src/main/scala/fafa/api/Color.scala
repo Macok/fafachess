@@ -8,11 +8,14 @@ sealed trait Color {
 }
 
 object Color {
+
   case object White extends Color {
-    override def isWhite: Boolean = true
+    lazy val unary_! = Black
+    lazy val isWhite = true
   }
 
   case object Black extends Color {
-    override def isWhite: Boolean = false
+    lazy val unary_! = White
+    lazy val isWhite = false
   }
 }

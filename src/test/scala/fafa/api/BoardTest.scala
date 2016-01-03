@@ -11,15 +11,15 @@ class BoardTest extends FlatSpec with Matchers {
 
   implicit def stringToBoard(boardStr: String): Board = {
     val strippedBoardStr = boardStr.stripMargin.trim
+    val charToRole: Map[Char, Role] = FENNotation.roleChars.map(_.swap)
     val pieces =
       for (
         (line, lineIndex) <- strippedBoardStr.stripMargin.trim.lines.zipWithIndex;
         (c, cIndex) <- line.zipWithIndex;
-        role <- FENNotation.roleChars.map(_.swap).get(c.toLower)
+        role <- charToRole.get(c.toLower)
       ) yield {
         val color = if (c.isLower) Black else White
         val piece = Piece(color, role)
-
         val pos = Pos(cIndex, BoardSize - 1 - lineIndex)
 
         (pos, piece)
