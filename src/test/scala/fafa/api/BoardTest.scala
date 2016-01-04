@@ -20,9 +20,8 @@ class BoardTest extends FlatSpec with Matchers {
       ) yield {
         val color = if (c.isLower) Black else White
         val pos = Pos(cIndex, BoardSize - 1 - lineIndex)
-        val piece = Piece(pos, color, role)
 
-        (pos, piece)
+        (pos, Piece(color, role))
       }
 
     Board(pieces.toMap)

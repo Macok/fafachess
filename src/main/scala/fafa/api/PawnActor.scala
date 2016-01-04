@@ -36,5 +36,7 @@ case class PawnActor(piece: Piece,
     } map {
       Move(pos, _)
     }
+
+    resolveMovesShortRange(standardMobilityVecs ++ captureMobilityVecs) ++ enPassantMoves
   }
 }
