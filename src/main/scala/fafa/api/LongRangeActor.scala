@@ -18,7 +18,7 @@ case class LongRangeActor(piece: Piece,
         // field occupied by friend
         case Some(nextPos) if occupiedByFriend(nextPos) => Nil
         // field occupied by enemy
-        case Some(nextPos) if occupiedBy(nextPos, !color) => List(Move(from, nextPos))
+        case Some(nextPos) if occupiedByEnemy(nextPos) => List(Move(from, nextPos, capturing = Some(nextPos)))
         // field free
         case Some(nextPos) => Move(from, nextPos) :: nextMove(nextPos, color, vec)
       }

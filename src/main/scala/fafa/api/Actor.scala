@@ -25,8 +25,9 @@ abstract class Actor(piece: Piece,
 
   def resolveMovesShortRange(mobilityVecs: List[MobilityVec]): List[Move] = mobilityVecs flatMap { vec =>
     pos.addVector(vec)
-  } filterNot occupiedByFriend map {
-    Move(pos, _)
+  } filterNot occupiedByFriend map { to =>
+    val capturing = if (occupiedByEnemy(to)) Some(to) else None
+    Move(pos, to, capturing)
   }
 
   val piecemap = board.piecemap

@@ -27,14 +27,14 @@ case class PawnActor(piece: Piece,
     val enPassantMoves = List((-1, 0), (1, 0)) map {
       _ + directionVec
     } flatMap pos.addVector filter {
-      posToCapture => lastMove.exists { move =>
-        val from = posToCapture.addVector(directionVec)
-        val to = posToCapture.addVector(-directionVec)
+      nextPos => lastMove.exists { move =>
+        val from = nextPos.addVector(directionVec)
+        val to = nextPos.addVector(-directionVec)
 
         from.isDefined && to.isDefined && move.from == from.get && move.to == to.get
       }
-    } map {
-      Move(pos, _)
+    } map { nextPos =>
+      Move(pos, nextPos, capturing = nextPos.addVector(-directionVec))
     }
 
     resolveMovesShortRange(standardMobilityVecs ++ captureMobilityVecs) ++ enPassantMoves
