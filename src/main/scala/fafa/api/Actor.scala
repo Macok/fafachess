@@ -13,22 +13,24 @@ abstract class Actor(piece: Piece,
     potentialMoves //todo
   }
 
-  def occupiedByFriend(pos: Pos) = occupiedBy(pos, color)
-
-  def occupiedByEnemy(pos: Pos) = occupiedBy(pos, !color)
-
-  def occupiedBy(pos: Pos, color: Color) =
-    piecemap.get(pos).exists(_.color == color)
 
 
-  def potentialMoves: List[Move]
 
-  def resolveMovesShortRange(mobilityVecs: List[MobilityVec]): List[Move] = mobilityVecs flatMap { vec =>
+  protected def potentialMoves: List[Move]
+
+  protected def resolveMovesShortRange(mobilityVecs: List[MobilityVec]): List[Move] = mobilityVecs flatMap { vec =>
     pos.addVector(vec)
   } filterNot occupiedByFriend map { to =>
     val capturing = if (occupiedByEnemy(to)) Some(to) else None
     Move(pos, to, capturing)
   }
+
+  private def occupiedByFriend(pos: Pos) = occupiedBy(pos, color)
+
+  private def occupiedByEnemy(pos: Pos) = occupiedBy(pos, !color)
+
+  private def occupiedBy(pos: Pos, color: Color) =
+    piecemap.get(pos).exists(_.color == color)
 
   val piecemap = board.piecemap
   val lastMove = board.lastMove

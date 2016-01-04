@@ -9,13 +9,9 @@ import Board._
   */
 case class Board(piecemap: Map[Pos, Piece], lastMove: Option[Move] = None) {
 
-  implicit def mapEntryToActor: ((Pos, Piece)) => Actor = {
-    case (pos, piece) => Actor(piece, pos, this)
-  }
+  val actors = piecemap.map { case (pos, piece) => (pos, Actor(piece, pos, this)) }
 
-  def allPossibleMoves: List[Move] = piecemap.flatMap {
-    _.possibleMoves
-  } toList
+  def actorAt(pos: Pos) = actors.get(pos)
 
   override def toString: String = {
     (for (y <- (0 until BoardSize).reverse) yield {
