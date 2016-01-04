@@ -13,9 +13,6 @@ abstract class Actor(piece: Piece,
     potentialMoves //todo
   }
 
-
-
-
   protected def potentialMoves: List[Move]
 
   protected def resolveMovesShortRange(mobilityVecs: List[MobilityVec]): List[Move] = mobilityVecs flatMap { vec =>
@@ -25,9 +22,9 @@ abstract class Actor(piece: Piece,
     Move(pos, to, capturing)
   }
 
-  private def occupiedByFriend(pos: Pos) = occupiedBy(pos, color)
+  protected def occupiedByFriend(pos: Pos) = occupiedBy(pos, color)
 
-  private def occupiedByEnemy(pos: Pos) = occupiedBy(pos, !color)
+  protected def occupiedByEnemy(pos: Pos) = occupiedBy(pos, !color)
 
   private def occupiedBy(pos: Pos, color: Color) =
     piecemap.get(pos).exists(_.color == color)

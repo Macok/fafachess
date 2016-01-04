@@ -8,7 +8,7 @@ case class MobilityVec(dx: Int, dy: Int) {
 
   def +(other: MobilityVec): MobilityVec = MobilityVec(dx + other.dx, dy + other.dy)
 
-  val unary_- = MobilityVec(-dx, -dy)
+  lazy val unary_- = MobilityVec(-dx, -dy)
 }
 
 object MobilityVec {
