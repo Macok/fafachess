@@ -30,19 +30,18 @@ object Board {
   val BoardSize = 8
 
   def initialSet: Board = {
-    val initSeq = Seq(Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook)
+    val pieces =
+      Seq(Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook).zipWithIndex flatMap { case (role, x) =>
+        Seq(
+          //white in this row
+          (Pos(x, 0), Piece(White, role)),
+          (Pos(x, 1), Piece(White, Pawn)),
 
-    val pieces = (0 until BoardSize) flatMap { x: Int =>
-      Seq(
-        //white in this row
-        (Pos(x, 0), Piece(White, initSeq(x))),
-        (Pos(x, 1), Piece(White, Pawn)),
-
-        //black in this row
-        (Pos(x, BoardSize - 1), Piece(Black, initSeq(x))),
-        (Pos(x, BoardSize - 2), Piece(Black, Pawn))
-      )
-    }
+          //black in this row
+          (Pos(x, BoardSize - 1), Piece(Black, role)),
+          (Pos(x, BoardSize - 2), Piece(Black, Pawn))
+        )
+      }
 
     Board(pieces.toMap)
   }
