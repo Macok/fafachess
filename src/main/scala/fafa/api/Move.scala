@@ -6,6 +6,4 @@ package fafa.api
 case class Move(from: Pos,
                 to: Pos,
                 capturing: Option[Pos] = None,
-                promoteTo: Option[Role] = None) {
-
-}
+                promoteTo: Option[Role] = None)
