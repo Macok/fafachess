@@ -21,7 +21,7 @@ abstract class Actor(piece: Piece,
     piecemap.get(pos).exists(_.color == color)
 
 
-  abstract def potentialMoves: List[Move]
+  def potentialMoves: List[Move]
 
   def resolveMovesShortRange(mobilityVecs: List[MobilityVec]): List[Move] = mobilityVecs flatMap { vec =>
     pos.addVector(vec)
