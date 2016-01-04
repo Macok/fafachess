@@ -29,18 +29,31 @@ case class Board(piecemap: Map[Pos, Piece], lastMove: Option[Move] = None) {
 object Board {
   val BoardSize = 8
 
-  def initialSet: Board = {
-    val pieces =
-      Seq(Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook).zipWithIndex flatMap { case (role, x) =>
-        Seq(
-          //white in this row
-          (Pos(x, 0), Piece(White, role)),
-          (Pos(x, 1), Piece(White, Pawn)),
+  def initialSet: Board =
+    """
+      |rnbqkbnr
+      |pppppppp
+      |
+      |
+      |
+      |
+      |PPPPPPPP
+      |RNBQKBNR
+    """
 
-          //black in this row
-          (Pos(x, BoardSize - 1), Piece(Black, role)),
-          (Pos(x, BoardSize - 2), Piece(Black, Pawn))
-        )
+  implicit def fromString(boardStr: String): Board = {
+    val strippedBoardStr = boardStr.stripMargin.trim
+    val charToRole: Map[Char, Role] = FENNotation.roleChars.map(_.swap)
+    val pieces =
+      for (
+        (line, lineIndex) <- strippedBoardStr.stripMargin.trim.lines.zipWithIndex;
+        (c, cIndex) <- line.zipWithIndex;
+        role <- charToRole.get(c.toLower)
+      ) yield {
+        val color = if (c.isLower) Black else White
+        val pos = Pos(cIndex, BoardSize - 1 - lineIndex)
+
+        (pos, Piece(color, role))
       }
 
     Board(pieces.toMap)
