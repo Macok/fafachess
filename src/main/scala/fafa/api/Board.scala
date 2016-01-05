@@ -38,11 +38,11 @@ object Board {
     """
 
   implicit def fromString(boardStr: String): Board = {
-    val strippedBoardStr = boardStr.stripMargin.trim
+    val strippedBoardStr = boardStr.trim.stripMargin
     val charToRole: Map[Char, Role] = FENNotation.roleChars.map(_.swap)
     val pieces =
       for (
-        (line, lineIndex) <- strippedBoardStr.stripMargin.trim.lines.zipWithIndex;
+        (line, lineIndex) <- strippedBoardStr.lines.zipWithIndex;
         (c, cIndex) <- line.zipWithIndex;
         role <- charToRole.get(c.toLower)
       ) yield {

@@ -9,8 +9,6 @@ import Move._
   */
 class RookTest extends BaseTest {
 
-  def isCapturing(move: Move) = move.capturing.isDefined
-
   "Rook" should "threat pieces at the same rank or file" in {
     val actor =
       """
@@ -22,14 +20,11 @@ class RookTest extends BaseTest {
         |   R   p
         |
         |
-      """.actorAt(Pos.D3)
+      """.actorAt(Pos.D3).get
 
-    assert(actor.isDefined)
+    actor.role should be(Rook)
 
-    actor.get.role should be(Rook)
-    val capturingMoves = actor.get.possibleMoves filter isCapturing
-
-    capturingMoves.toSet should be(Set(
+    capturingMoves(actor) should be(Set(
       Move(Pos.D3, Pos.H3, capturing = Some(Pos.H3)),
       Move(Pos.D3, Pos.D7, capturing = Some(Pos.D7))
     ))
@@ -46,10 +41,9 @@ class RookTest extends BaseTest {
         |   R   p
         |   p
         |
-      """.actorAt(Pos.D3)
+      """.actorAt(Pos.D3).get
 
-    val notCapturingMoves = actor.get.possibleMoves filterNot isCapturing
-    notCapturingMoves.toSet should be(Set(
+    nonCapturingMoves(actor) should be(Set(
       Move(Pos.D3, Pos.E3), Move(Pos.D3, Pos.F3), Move(Pos.D3, Pos.G3),
       Move(Pos.D3, Pos.C3), Move(Pos.D3, Pos.B3), Move(Pos.D3, Pos.A3),
       Move(Pos.D3, Pos.D4), Move(Pos.D3, Pos.D5), Move(Pos.D3, Pos.D6)
