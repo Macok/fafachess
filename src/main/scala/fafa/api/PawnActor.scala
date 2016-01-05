@@ -1,6 +1,7 @@
 package fafa.api
 
 import MobilityVec._
+import fafa.api.Role.Queen
 
 /**
   * Created by mac on 04.01.16.
@@ -49,8 +50,15 @@ case class PawnActor(piece: Piece,
       pos.addVector
     } map { to => Move(pos, to, capturing = Some(to)) }
 
-    standardMoves ++ capturingMoves ++ enPassantMoves
+    // include promotions
+    // todo allow weak promotions
+    (standardMoves ++ capturingMoves ++ enPassantMoves) map {
+      case move if isLastRank(move.to) => move.copy(promoteTo = Some(Queen))
+      case move => move
+    }
   }
 
-  val isOnInitialPosition = (color.isWhite && pos.rowNum == 2) || (!color.isWhite && pos.rowNum == 7)
+  def isLastRank(pos: Pos) = (color.isWhite && pos.rowNum == Board.BoardSize) || (!color.isWhite && pos.rowNum == 1)
+
+  val isOnInitialPosition = (color.isWhite && pos.rowNum == 2) || (!color.isWhite && pos.rowNum == Board.BoardSize - 1)
 }

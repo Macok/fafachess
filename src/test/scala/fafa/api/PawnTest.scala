@@ -1,7 +1,7 @@
 package fafa.api
 
 import fafa.api.Board._
-import fafa.api.Role.{Pawn, King}
+import fafa.api.Role.{Pawn, Queen}
 
 /**
   * Created by mac on 04.01.16.
@@ -82,6 +82,25 @@ class PawnTest extends BaseTest {
     actor.possibleMoves.toSet should be(Set(
       Move(Pos.B6, Pos.B7),
       Move(Pos.B6, Pos.C7, capturing = Some(Pos.C6))
+    ))
+  }
+
+  it should "get promotion at last rank" in {
+    val actor =
+      """
+        |  p
+        | P
+        |
+        |
+        |
+        |
+        |
+        |
+      """ actorAt Pos.B7 get
+
+    actor.possibleMoves.toSet should be(Set(
+      Move(Pos.B7, Pos.B8, promoteTo = Some(Queen)),
+      Move(Pos.B7, Pos.C8, capturing = Some(Pos.C8), promoteTo = Some(Queen))
     ))
   }
 }
