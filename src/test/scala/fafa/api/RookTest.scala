@@ -2,7 +2,6 @@ package fafa.api
 
 import fafa.api.Board._
 import fafa.api.Role.Rook
-import Move._
 
 /**
   * Created by mac on 04.01.16.

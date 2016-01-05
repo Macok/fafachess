@@ -28,7 +28,7 @@ class KnightTest extends BaseTest {
     ))
   }
 
-  it should "move to any position at the same rank or file" in {
+  it should "move to allowed possitions" in {
     val actor =
       """
         |
