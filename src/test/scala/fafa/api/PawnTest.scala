@@ -42,7 +42,7 @@ class PawnTest extends BaseTest {
         |
       """ actorAt Pos.C2 get
 
-    actor.possibleMoves should be(Set(
+    actor.possibleMoves.toSet should be(Set(
       Move(Pos.C2, Pos.C3),
       Move(Pos.C2, Pos.C4)
     ))
@@ -63,6 +63,25 @@ class PawnTest extends BaseTest {
 
     actor.possibleMoves.toSet should be(Set(
       Move(Pos.C3, Pos.C4)
+    ))
+  }
+
+  it should "capture other pawns en passant" in {
+    val actor =
+      """
+        |  p
+        |
+        |pP
+        |
+        |
+        |
+        |
+        |
+      """ move Move(Pos.C8, Pos.C6) actorAt Pos.B6 get
+
+    actor.possibleMoves.toSet should be(Set(
+      Move(Pos.B6, Pos.B7),
+      Move(Pos.B6, Pos.C7, capturing = Some(Pos.C6))
     ))
   }
 }
