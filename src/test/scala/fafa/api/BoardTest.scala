@@ -18,7 +18,7 @@ class BoardTest extends BaseTest {
     at(_)
   }
 
-  "Board" should "place white pieces correctly" in {
+  "Board" should "place white pieces according to the rules" in {
 
     rank(1) should be(
       Seq[Piece](
@@ -35,4 +35,20 @@ class BoardTest extends BaseTest {
     rank(7) should be(Seq.fill[Piece](8)((Black, Pawn)))
   }
 
+  it should "reposition pawn after move" in {
+    val boardAfterMove =
+      """
+        |
+        |
+        |
+        |
+        |
+        |
+        |   P
+        |
+      """ move Move(Pos.D2, Pos.D4)
+
+    boardAfterMove.piecemap should be (Map[Pos, Piece](Pos.D4 -> Piece(White, Pawn)))
+    boardAfterMove.lastMove should be (Some(Move(Pos.D2, Pos.D4)))
+  }
 }

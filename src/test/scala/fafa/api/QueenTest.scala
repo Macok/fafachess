@@ -8,7 +8,7 @@ import fafa.api.Role.{Queen, Knight}
   */
 class QueenTest extends BaseTest {
 
-  "Knight" should "threat pieces at the same rank, file or diagonal" in {
+  "Queen" should "threat pieces at the same rank, file or diagonal" in {
     val actor =
       """
         |

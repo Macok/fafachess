@@ -14,6 +14,8 @@ case class Pos(x: Int, y: Int) {
   def addVector(vec: MobilityVec): Option[Pos] =
     posOption(x + vec.dx, y + vec.dy)
 
+  val rowNum = y + 1
+
   override def toString = {
     "" + ('A' + x).asInstanceOf[Char] + (y + 1).toString
   }

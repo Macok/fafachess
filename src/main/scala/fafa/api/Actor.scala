@@ -15,13 +15,6 @@ abstract class Actor(piece: Piece,
 
   protected def potentialMoves: List[Move]
 
-  protected def resolveMovesShortRange(mobilityVecs: List[MobilityVec]): List[Move] = mobilityVecs flatMap { vec =>
-    pos.addVector(vec)
-  } filterNot occupiedByFriend map { to =>
-    val capturing = if (occupiedByEnemy(to)) Some(to) else None
-    Move(pos, to, capturing)
-  }
-
   protected def occupiedByFriend(pos: Pos) = occupiedBy(pos, color)
 
   protected def occupiedByEnemy(pos: Pos) = occupiedBy(pos, !color)

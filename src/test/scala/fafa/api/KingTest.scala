@@ -8,7 +8,7 @@ import fafa.api.Role.{King, Queen}
   */
 class KingTest extends BaseTest {
 
-  "Knight" should "threat pieces next to it" in {
+  "King" should "threat pieces next to it" in {
     val actor =
       """
         |

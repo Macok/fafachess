@@ -13,6 +13,13 @@ case class Board(piecemap: Map[Pos, Piece], lastMove: Option[Move] = None) {
 
   def actorAt(pos: Pos) = actors.get(pos)
 
+  def move(move: Move) = {
+    val piece = piecemap.get(move.from).get
+    val newPiecemap: Map[Pos, Piece] = piecemap - move.from -- move.capturing.toList + (move.to -> piece)
+
+    copy(newPiecemap, Some(move))
+  }
+
   override def toString: String = {
     (for (y <- (0 until BoardSize).reverse) yield {
       (for (x <- 0 until BoardSize) yield {
@@ -25,7 +32,7 @@ case class Board(piecemap: Map[Pos, Piece], lastMove: Option[Move] = None) {
 object Board {
   val BoardSize = 8
 
-  def initialSet: Board =
+  val initialSet: Board =
     """
       |rnbqkbnr
       |pppppppp

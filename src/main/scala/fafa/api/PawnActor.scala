@@ -14,14 +14,16 @@ case class PawnActor(piece: Piece,
   def resolvePawnMoves: List[Move] = {
     val direction = if (color.isWhite) 1 else -1
     val directionVec = (0, 1) * direction
-    val standardMobilityVecs = List((0, 1), (0, 2)) map {
-      _ * direction
-    }
+    val standardMobilityVecs =
+      List[MobilityVec]((0, 1)) ++
+        (if (isOnInitialPosition) Some(MobilityVec(0, 2)) else None).toList map {
+        _ * direction
+      }
 
-    val captureMobilityVecs = List((-1, 0), (1, 0)) map {
+    val capturingMobilityVecs = List((-1, 0), (1, 0)) map {
       _ + directionVec
     } filter { vec => val posToCapture = pos.addVector(vec)
-      posToCapture.isEmpty && occupiedByEnemy(posToCapture.get)
+      posToCapture.isDefined && occupiedByEnemy(posToCapture.get)
     }
 
     val enPassantMoves = List((-1, 0), (1, 0)) map {
@@ -37,6 +39,18 @@ case class PawnActor(piece: Piece,
       Move(pos, nextPos, capturing = nextPos.addVector(-directionVec))
     }
 
-    resolveMovesShortRange(standardMobilityVecs ++ captureMobilityVecs) ++ enPassantMoves
+    val standardMoves = standardMobilityVecs flatMap {
+      pos.addVector
+    } map {
+      Move(pos, _)
+    }
+
+    val capturingMoves = capturingMobilityVecs flatMap {
+      pos.addVector
+    } map { to => Move(pos, to, capturing = Some(to)) }
+
+    standardMoves ++ capturingMoves ++ enPassantMoves
   }
+
+  val isOnInitialPosition = (color.isWhite && pos.rowNum == 2) || (!color.isWhite && pos.rowNum == 7)
 }
