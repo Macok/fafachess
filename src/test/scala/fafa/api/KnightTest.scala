@@ -28,7 +28,7 @@ class KnightTest extends BaseTest {
     ))
   }
 
-  it should "move to allowed possitions" in {
+  it should "move to allowed positions" in {
     val actor =
       """
         |

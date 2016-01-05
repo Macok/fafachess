@@ -11,8 +11,12 @@ case class Pos(x: Int, y: Int) {
   lazy val left = posOption(x - 1, y)
   lazy val right = posOption(x + 1, y)
 
-  def addVector(vec: MobilityVec): Option[Pos] = 
+  def addVector(vec: MobilityVec): Option[Pos] =
     posOption(x + vec.dx, y + vec.dy)
+
+  override def toString = {
+    "" + ('A' + x).asInstanceOf[Char] + (y + 1).toString
+  }
 }
 
 object Pos {
@@ -20,7 +24,7 @@ object Pos {
     if (posInsideBoard(Pos(x, y))) Some(Pos(x, y))
     else None
   }
-  
+
   def posInsideBoard(pos: Pos): Boolean = all.contains(pos)
 
   val A1 = Pos(0, 0)
