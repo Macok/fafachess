@@ -6,15 +6,14 @@ import Pos._
   * Created by mac on 03.01.16.
   */
 case class Pos(x: Int, y: Int) {
-  lazy val up = posOption(x, y + 1)
-  lazy val down = posOption(x, y - 1)
-  lazy val left = posOption(x - 1, y)
-  lazy val right = posOption(x + 1, y)
-
   def addVector(vec: Vec): Option[Pos] =
     posOption(x + vec.dx, y + vec.dy)
 
   val rowNum = y + 1
+
+  def to(other: Pos): Seq[Pos] =
+    for (y <- this.y to other.y;
+         x <- this.x to other.x) yield Pos(x, y)
 
   override def toString = {
     "" + ('A' + x).asInstanceOf[Char] + (y + 1).toString
