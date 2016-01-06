@@ -1,6 +1,6 @@
 package fafa.api
 
-import MobilityVec._
+import Vec._
 import fafa.api.Role.Queen
 
 /**
@@ -12,20 +12,26 @@ case class PawnActor(piece: Piece,
 
   override def potentialMoves: List[Move] = resolvePawnMoves
 
-  def resolvePawnMoves: List[Move] = {
-    val direction = if (color.isWhite) 1 else -1
-    val directionVec = (0, 1) * direction
-    val standardMobilityVecs =
-      List[MobilityVec]((0, 1)) ++
-        (if (isOnInitialPosition) Some(MobilityVec(0, 2)) else None).toList map {
-        _ * direction
-      }
+  val direction = if (color.isWhite) 1 else -1
+  val directionVec = (0, 1) * direction
 
-    val capturingMobilityVecs = List((-1, 0), (1, 0)) map {
+  def resolvePawnMoves: List[Move] = {
+    val oneSquareForward = pos.addVector(directionVec)
+    val twoSquaresForward =
+      if (oneSquareForward.exists(isEmpty) && isOnInitialPosition) pos.addVector(directionVec * 2)
+      else None
+
+    val standardMoves = oneSquareForward.toList ++ twoSquaresForward filter isEmpty map {
+      Move(pos, _)
+    }
+
+    val standardCapturingMoves = List((-1, 0), (1, 0)) map {
       _ + directionVec
     } filter { vec => val posToCapture = pos.addVector(vec)
       posToCapture.isDefined && occupiedByEnemy(posToCapture.get)
-    }
+    } flatMap {
+      pos.addVector
+    } map { to => Move(pos, to, capturing = Some(to)) }
 
     val enPassantMoves = List((-1, 0), (1, 0)) map {
       _ + directionVec
@@ -40,25 +46,19 @@ case class PawnActor(piece: Piece,
       Move(pos, nextPos, capturing = nextPos.addVector(-directionVec))
     }
 
-    val standardMoves = standardMobilityVecs flatMap {
-      pos.addVector
-    } map {
-      Move(pos, _)
-    }
-
-    val capturingMoves = capturingMobilityVecs flatMap {
-      pos.addVector
-    } map { to => Move(pos, to, capturing = Some(to)) }
-
     // include promotions
     // todo allow weak promotions
-    (standardMoves ++ capturingMoves ++ enPassantMoves) map {
+    (standardMoves ++ standardCapturingMoves ++ enPassantMoves) map {
       case move if isLastRank(move.to) => move.copy(promoteTo = Some(Queen))
       case move => move
     }
   }
 
-  def isLastRank(pos: Pos) = (color.isWhite && pos.rowNum == Board.BoardSize) || (!color.isWhite && pos.rowNum == 1)
+  private def isLastRank(pos: Pos) = (color.isWhite && pos.rowNum == Board.BoardSize) ||
+    (!color.isWhite && pos.rowNum == 1)
 
-  val isOnInitialPosition = (color.isWhite && pos.rowNum == 2) || (!color.isWhite && pos.rowNum == Board.BoardSize - 1)
+  private val isOnInitialPosition = (color.isWhite && pos.rowNum == 2) ||
+    (!color.isWhite && pos.rowNum == Board.BoardSize - 1)
+
+  private def isEmpty(pos: Pos) = piecemap.get(pos).isEmpty
 }

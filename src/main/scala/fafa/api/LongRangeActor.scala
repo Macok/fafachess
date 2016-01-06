@@ -11,7 +11,7 @@ case class LongRangeActor(piece: Piece,
 
   def resolveMovesLongRange: List[Move] = {
     val from = pos
-    def nextMove(pos: Pos, color: Color, vec: MobilityVec): List[Move] =
+    def nextMove(pos: Pos, color: Color, vec: Vec): List[Move] =
       pos.addVector(vec) match {
         // field not in board
         case None => Nil

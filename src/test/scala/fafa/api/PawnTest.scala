@@ -23,7 +23,7 @@ class PawnTest extends BaseTest {
 
     actor.role should be(Pawn)
 
-    capturingMoves(actor) should be(Set(
+    actor.possibleMoves.toSet should be(Set(
       Move(Pos.C2, Pos.B3, capturing = Some(Pos.B3)),
       Move(Pos.C2, Pos.D3, capturing = Some(Pos.D3))
     ))
@@ -102,5 +102,21 @@ class PawnTest extends BaseTest {
       Move(Pos.B7, Pos.B8, promoteTo = Some(Queen)),
       Move(Pos.B7, Pos.C8, capturing = Some(Pos.C8), promoteTo = Some(Queen))
     ))
+  }
+
+  it should "not skip over other piece" in {
+    val actor =
+      """
+        |
+        |
+        |
+        |
+        |
+        | p
+        | P
+        |
+      """ actorAt Pos.B2 get
+
+    actor.possibleMoves shouldBe List()
   }
 }

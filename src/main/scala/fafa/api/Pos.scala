@@ -11,7 +11,7 @@ case class Pos(x: Int, y: Int) {
   lazy val left = posOption(x - 1, y)
   lazy val right = posOption(x + 1, y)
 
-  def addVector(vec: MobilityVec): Option[Pos] =
+  def addVector(vec: Vec): Option[Pos] =
     posOption(x + vec.dx, y + vec.dy)
 
   val rowNum = y + 1

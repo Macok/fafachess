@@ -9,7 +9,7 @@ case class ShortRangeActor(piece: Piece,
 
   override def potentialMoves = resolveMovesShortRange(role.mobilityVecs)
 
-  protected def resolveMovesShortRange(mobilityVecs: List[MobilityVec]): List[Move] = mobilityVecs flatMap { vec =>
+  protected def resolveMovesShortRange(mobilityVecs: List[Vec]): List[Move] = mobilityVecs flatMap { vec =>
     pos.addVector(vec)
   } filterNot occupiedByFriend map { to =>
     val capturing = if (occupiedByEnemy(to)) Some(to) else None
