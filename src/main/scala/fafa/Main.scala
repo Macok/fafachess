@@ -1,18 +1,16 @@
 package fafa
 
-import java.io.File
+import akka.actor.{ActorSystem, Props}
+import fafa.actor.{IOActor, ProtocolHandlerActor}
 
 /**
   * Created by mac on 02.01.16.
   */
 object Main {
   def main(args: Array[String]): Unit = {
-    val file = new File("chesslog.txt")
-    val p = new java.io.PrintWriter(file)
+    val system = ActorSystem()
 
-    for (ln <- io.Source.stdin.getLines) {
-      p.println("LINIA: " + ln)
-      p.flush()
-    }
+    val protocolHandlerActor = system.actorOf(Props[ProtocolHandlerActor])
+    val ioActor = system.actorOf(Props(classOf[IOActor], protocolHandlerActor))
   }
 }
