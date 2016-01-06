@@ -37,6 +37,8 @@ case class Board(piecemap: Map[Pos, Piece], history: List[Move] = List()) {
     copy(piecemap = newPiecemap, history :+ move)
   }
 
+  val lastMove = history.headOption
+
   override def toString: String = {
     (for (y <- (0 until BoardSize).reverse) yield {
       (for (x <- 0 until BoardSize) yield {

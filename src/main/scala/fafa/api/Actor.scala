@@ -30,7 +30,7 @@ abstract class Actor(piece: Piece,
   }
 
   val piecemap = board.piecemap
-  val lastMove = board.lastMove
+  val history = board.history
   val role = piece.role
   val color = piece.color
 }
@@ -38,6 +38,7 @@ abstract class Actor(piece: Piece,
 object Actor {
   def apply(piece: Piece, pos: Pos, board: Board): Actor = piece.role match {
     case Pawn => PawnActor(piece, pos, board)
+    case King => KingActor(piece, pos, board)
     case Rook | Queen | Bishop => LongRangeActor(piece, pos, board)
     case _ => ShortRangeActor(piece, pos, board)
   }

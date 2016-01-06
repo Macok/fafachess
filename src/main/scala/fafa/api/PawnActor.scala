@@ -36,7 +36,7 @@ case class PawnActor(piece: Piece,
     val enPassantMoves = List((-1, 0), (1, 0)) map {
       _ + directionVec
     } flatMap pos.addVector filter {
-      nextPos => lastMove.exists { move =>
+      nextPos => board.lastMove.exists { move =>
         val from = nextPos.addVector(directionVec)
         val to = nextPos.addVector(-directionVec)
 
