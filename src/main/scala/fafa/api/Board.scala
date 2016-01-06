@@ -15,6 +15,12 @@ case class Board(piecemap: Map[Pos, Piece], history: List[Move] = List()) {
 
   def pieceAt(pos: Pos): Option[Piece] = piecemap.get(pos)
 
+  lazy val allPossibleMoves = actors.values filter {
+    _.color == turn
+  } flatMap {
+    _.possibleMoves
+  }
+
   def move(move: Move): Board =
     if (move.castling.isDefined) castlingMove(move)
     else standardMove(move)
@@ -40,6 +46,10 @@ case class Board(piecemap: Map[Pos, Piece], history: List[Move] = List()) {
   }
 
   val lastMove = history.headOption
+
+  val turn: Color =
+    if (lastMove.isEmpty) White
+    else !pieceAt(lastMove.get.to).get.color
 
   override def toString: String = {
     (for (y <- (0 until BoardSize).reverse) yield {
