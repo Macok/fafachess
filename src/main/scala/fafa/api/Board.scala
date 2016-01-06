@@ -7,13 +7,13 @@ import Board._
 /**
   * Created by mac on 03.01.16.
   */
-case class Board(piecemap: Map[Pos, Piece], history: List[Move] = List()) {
+case class Board(pieces: Map[Pos, Piece], history: List[Move] = List()) {
 
-  val actors: Map[Pos, Actor] = piecemap.map { case (pos, piece) => (pos, Actor(piece, pos, this)) }
+  val actors: Map[Pos, Actor] = pieces.map { case (pos, piece) => (pos, Actor(piece, pos, this)) }
 
   def actorAt(pos: Pos): Option[Actor] = actors.get(pos)
 
-  def pieceAt(pos: Pos): Option[Piece] = piecemap.get(pos)
+  def pieceAt(pos: Pos): Option[Piece] = pieces.get(pos)
 
   lazy val allPossibleMoves = actors.values filter {
     _.color == turn
@@ -26,10 +26,10 @@ case class Board(piecemap: Map[Pos, Piece], history: List[Move] = List()) {
     else standardMove(move)
 
   private def standardMove(move: Move) = {
-    val piece = piecemap.get(move.from).get
-    val newPiecemap: Map[Pos, Piece] = piecemap - move.from -- move.capturing.toList + (move.to -> piece)
+    val piece = pieces.get(move.from).get
+    val newPiecemap: Map[Pos, Piece] = pieces - move.from -- move.capturing.toList + (move.to -> piece)
 
-    copy(newPiecemap, history :+ move)
+    copy(newPiecemap, move :: history)
   }
 
   private def castlingMove(move: Move) = {
@@ -37,24 +37,29 @@ case class Board(piecemap: Map[Pos, Piece], history: List[Move] = List()) {
     assert(move.promoteTo.isEmpty)
 
     val rookMove = move.castling.get
-    val king = piecemap.get(move.from).get
-    val rook = piecemap.get(rookMove.from).get
+    val king = pieces.get(move.from).get
+    val rook = pieces.get(rookMove.from).get
 
-    val newPiecemap = piecemap - move.from - rookMove.from + (move.to -> king) + (rookMove.to -> rook)
+    val newPiecemap = pieces - move.from - rookMove.from + (move.to -> king) + (rookMove.to -> rook)
 
-    copy(piecemap = newPiecemap, history :+ move)
+    copy(pieces = newPiecemap, move :: history)
   }
 
   val lastMove = history.headOption
 
   val turn: Color =
     if (lastMove.isEmpty) White
-    else !pieceAt(lastMove.get.to).get.color
+    else {
+      if (pieceAt(lastMove.get.to).isEmpty) {
+        println(lastMove.get)
+      }
+      !pieceAt(lastMove.get.to).get.color
+    }
 
   override def toString: String = {
     (for (y <- (0 until BoardSize).reverse) yield {
       (for (x <- 0 until BoardSize) yield {
-        piecemap.get(Pos(x, y)).fold(' ')(piece => FENNotation.symbol(piece))
+        pieces.get(Pos(x, y)).fold(' ')(piece => FENNotation.symbol(piece))
       }).mkString
     }).mkString("\n")
   }

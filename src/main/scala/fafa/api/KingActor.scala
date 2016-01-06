@@ -5,9 +5,9 @@ import fafa.api.Role.Rook
 /**
   * Created by mac on 06.01.16.
   */
-case class KingActor(piece: Piece,
-                     pos: Pos,
-                     board: Board) extends Actor(piece, pos, board) {
+class KingActor(piece: Piece,
+                pos: Pos,
+                board: Board) extends Actor(piece, pos, board) {
 
   val onInitialPosition: Boolean = if (color.isWhite) pos == Pos.E1 else pos == Pos.E8
 

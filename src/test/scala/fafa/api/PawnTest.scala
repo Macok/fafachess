@@ -119,4 +119,24 @@ class PawnTest extends BaseTest {
 
     actor.possibleMoves shouldBe List()
   }
+
+  "Black pawn" should "threat pieces one square forward and to the left/right" in {
+    val board =
+      """
+        |
+        |
+        |
+        |PPP
+        |ppP
+        |K P
+        |P
+        |
+      """
+
+    capturingMoves(board actorAt Pos.A4 get) shouldBe Set()
+    capturingMoves(board actorAt Pos.B4 get) shouldBe Set(
+      Move(Pos.B4, Pos.A3, capturing = Some(Pos.A3)),
+      Move(Pos.B4, Pos.C3, capturing = Some(Pos.C3))
+    )
+  }
 }

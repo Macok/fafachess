@@ -12,7 +12,7 @@ class BoardTest extends BaseTest {
 
   implicit def tupleToPiece(t: (Color, Role)): Piece = Piece(t._1, t._2)
 
-  val at = Board.initialSet.piecemap.get _
+  val at = Board.initialSet.pieces.get _
 
   def rank(rowNum: Int) = Pos.all.slice((rowNum - 1) * BoardSize, rowNum * BoardSize) flatMap {
     at(_)
@@ -47,7 +47,7 @@ class BoardTest extends BaseTest {
         |
       """ move Move(Pos.D2, Pos.D4)
 
-    boardAfterMove.piecemap should be (Map[Pos, Piece](Pos.D4 -> Piece(White, Pawn)))
+    boardAfterMove.pieces should be (Map[Pos, Piece](Pos.D4 -> Piece(White, Pawn)))
     boardAfterMove.lastMove should be (Some(Move(Pos.D2, Pos.D4)))
   }
 

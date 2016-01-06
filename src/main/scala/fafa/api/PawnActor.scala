@@ -6,9 +6,9 @@ import fafa.api.Role.Queen
 /**
   * Created by mac on 04.01.16.
   */
-case class PawnActor(piece: Piece,
-                     pos: Pos,
-                     board: Board) extends Actor(piece, pos, board) {
+class PawnActor(piece: Piece,
+                pos: Pos,
+                board: Board) extends Actor(piece, pos, board) {
 
   override def potentialMoves: List[Move] = resolvePawnMoves
 
