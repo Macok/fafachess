@@ -22,6 +22,13 @@ abstract class Actor(piece: Piece,
   private def occupiedBy(pos: Pos, color: Color) =
     piecemap.get(pos).exists(_.color == color)
 
+  protected def resolveMovesShortRange(mobilityVecs: List[Vec]): List[Move] = mobilityVecs flatMap { vec =>
+    pos.addVector(vec)
+  } filterNot occupiedByFriend map { to =>
+    val capturing = if (occupiedByEnemy(to)) Some(to) else None
+    Move(pos, to, capturing)
+  }
+
   val piecemap = board.piecemap
   val lastMove = board.lastMove
   val role = piece.role
