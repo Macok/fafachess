@@ -29,6 +29,6 @@ class IOActor(protocolHandler: ActorRef) extends Actor {
     case s: String if sender() == protocolHandler =>
       out.println(s)
     case s: String if sender() == self =>
-      protocolHandler ! s
+      protocolHandler ! s.trim
   }
 }
