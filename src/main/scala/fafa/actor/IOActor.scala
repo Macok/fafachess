@@ -28,6 +28,7 @@ class IOActor(protocolHandler: ActorRef) extends Actor {
   override def receive: Receive = {
     case s: String if sender() == protocolHandler =>
       out.println(s)
+      out.flush()
     case s: String if sender() == self =>
       protocolHandler ! s.trim
   }

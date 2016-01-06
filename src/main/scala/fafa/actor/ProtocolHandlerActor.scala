@@ -1,17 +1,23 @@
 package fafa.actor
 
-import akka.actor.Actor
+import akka.actor.{ActorRef, Actor}
 import fafa.messages.Message
 import fafa.protocol.UciProtocol
 
 /**
   * Created by mac on 06.01.16.
   */
-class ProtocolHandlerActor extends Actor {
-  val protocol = UciProtocol() //todo allow protocol switch
+class ProtocolHandlerActor(engineActor: ActorRef) extends Actor {
+  var ioActor: Option[ActorRef] = None
+  val protocol = new UciProtocol //todo allow protocol switch
 
   override def receive: Receive = {
-    case inputLine: String => protocol.parseMessage(inputLine)
-    case m: Message => protocol.serializeMessage(m)
+    case ioActor: ActorRef => this.ioActor = Some(ioActor)
+
+    case inputLine: String => protocol.parseMessage(inputLine) foreach {
+      engineActor ! _
+    }
+
+    case m: Message => ioActor.get ! protocol.serializeMessage(m)
   }
 }
