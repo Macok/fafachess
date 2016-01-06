@@ -19,7 +19,6 @@ class BoardTest extends BaseTest {
   }
 
   "Board" should "place white pieces according to the rules" in {
-
     rank(1) should be(
       Seq[Piece](
         (White, Rook), (White, Knight), (White, Bishop), (White, Queen), (White, King), (White, Bishop), (White, Knight), (White, Rook)
@@ -50,5 +49,22 @@ class BoardTest extends BaseTest {
 
     boardAfterMove.piecemap should be (Map[Pos, Piece](Pos.D4 -> Piece(White, Pawn)))
     boardAfterMove.lastMove should be (Some(Move(Pos.D2, Pos.D4)))
+  }
+
+  it should "perform castling moves" in {
+    val boardAfterMove =
+      """
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |R   KB R
+      """ move Move(Pos.E1, Pos.C1, castling = Some(Move(Pos.A1, Pos.D1)))
+
+    boardAfterMove pieceAt Pos.C1 shouldBe Some(Piece(White, King))
+    boardAfterMove pieceAt Pos.D1 shouldBe Some(Piece(White, Rook))
   }
 }

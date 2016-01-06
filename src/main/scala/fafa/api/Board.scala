@@ -13,6 +13,8 @@ case class Board(piecemap: Map[Pos, Piece], history: List[Move] = List()) {
 
   def actorAt(pos: Pos): Option[Actor] = actors.get(pos)
 
+  def pieceAt(pos: Pos): Option[Piece] = piecemap.get(pos)
+
   def move(move: Move): Board =
     if (move.castling.isDefined) castlingMove(move)
     else standardMove(move)
@@ -32,7 +34,7 @@ case class Board(piecemap: Map[Pos, Piece], history: List[Move] = List()) {
     val king = piecemap.get(move.from).get
     val rook = piecemap.get(rookMove.from).get
 
-    val newPiecemap = piecemap - move.from - rookMove.from + (move.to -> rook) + (rookMove.to -> rook)
+    val newPiecemap = piecemap - move.from - rookMove.from + (move.to -> king) + (rookMove.to -> rook)
 
     copy(piecemap = newPiecemap, history :+ move)
   }
