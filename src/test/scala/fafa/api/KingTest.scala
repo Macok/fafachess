@@ -37,8 +37,8 @@ class KingTest extends BaseTest {
         |
         |
         |
-        |pp
-        |K p
+        |rp
+        |K  p
         |P
         |
       """ actorAt Pos.A3 get

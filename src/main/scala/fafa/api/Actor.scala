@@ -10,11 +10,13 @@ abstract class Actor(piece: Piece,
                      board: Board) {
 
   def possibleMoves: List[Move] = {
-    potentialMoves
+    potentialMoves filter {
+      !Config.filterMovesLeavingKingInCheck || board.move(_).isKingSafe(color)
+    }
   }
 
   // possible moves without checking for king's safety
-  protected def potentialMoves: List[Move]
+  def potentialMoves: List[Move]
 
   protected def occupiedByFriend(pos: Pos) = occupiedBy(pos, color)
 

@@ -45,6 +45,21 @@ case class Board(pieces: Map[Pos, Piece], history: List[Move] = List()) {
     copy(pieces = newPiecemap, move :: history)
   }
 
+  def isKingSafe(color: Color): Boolean = {
+    val kingPosOption = pieces.find(_._2 == Piece(color, King)) map {
+      _._1
+    }
+    if (kingPosOption.isEmpty) return true // for testing convenience
+
+    val kingPos = kingPosOption.get
+
+    !(actors.values flatMap {
+      _.potentialMoves
+    } flatMap {
+      _.capturing
+    } exists { _ == kingPos })
+  }
+
   val lastMove = history.headOption
 
   val turn: Color =
