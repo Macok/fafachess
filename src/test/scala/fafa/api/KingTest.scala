@@ -110,7 +110,7 @@ class KingTest extends ChessApiTest {
     )
   }
 
-  "King" should "be unable to perform castling after move" in {
+  it should "be unable to perform castling after move" in {
     val king =
       """
         |    kb r
@@ -123,8 +123,25 @@ class KingTest extends ChessApiTest {
         |   K
       """ move Move(Pos.A7, Pos.A8) actorAt Pos.E8 get
 
-    king.possibleMoves.toSet filter {
+    king.possibleMoves filter {
       _.castling.isDefined
-    } shouldBe Set()
+    } shouldBe List()
+  }
+
+  it should "be unable to perform castling when in check" in {
+    val king =
+      """
+        |r   k  r
+        |    Q
+        |
+        |
+        |   p
+        |
+        |p
+        |   K
+      """ actorAt Pos.E8 get
+
+    king.possibleMoves shouldBe
+      List(Move(Pos.E8, Pos.E7, capturing = Some(Pos.E7)))
   }
 }

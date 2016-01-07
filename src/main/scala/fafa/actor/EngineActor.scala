@@ -2,6 +2,7 @@ package fafa.actor
 
 import akka.actor.{ActorRef, Actor}
 import akka.actor.Actor.Receive
+import fafa.Config
 import fafa.api.Board
 import fafa.messages._
 
@@ -20,7 +21,10 @@ class EngineActor extends Actor {
     case actor: ActorRef => protocolHandlerActor = Some(actor)
     case IsReadyMessage() => protocolHandlerActor.get ! ReadyOkMessage()
     case m: StartCalculationMessage =>
-      val bestMove = Random.shuffle(board.get.allPossibleMoves).head
+      val allPossibleMoves =
+        if (Config.filterMovesLeavingKingInCheck) board.get.allPossibleMoves
+        else board.get.allPossibleMovesNoKingSafetyFilter
+      val bestMove = Random.shuffle(allPossibleMoves).head
       protocolHandlerActor.get ! BestMoveMessage(bestMove)
     case SetPositionMessage(newBoard: Board) =>
       this.board = Some(newBoard)

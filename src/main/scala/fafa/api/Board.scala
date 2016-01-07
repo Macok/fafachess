@@ -24,7 +24,7 @@ case class Board(pieces: Map[Pos, Piece], history: List[Move] = List(), turn: Co
   }
 
   def allPossibleMovesNoKingSafetyFilter = color(turn) flatMap {
-    _.possibleMovesNoKingSafetyFilter
+    _.possibleMovesNoKingSafetyFilter()
   }
 
   def move(move: Move): Board =
@@ -57,13 +57,15 @@ case class Board(pieces: Map[Pos, Piece], history: List[Move] = List(), turn: Co
     }
     if (kingPosOption.isEmpty) return true // for testing convenience
 
-    !(actors.values flatMap {
-      _.possibleMovesNoKingSafetyFilter
+    val kingInCheck = this.color(!color) flatMap {
+      _.possibleMovesNoKingSafetyFilter(allowCastling = false)
     } flatMap {
       _.capturing
     } exists {
       _ == kingPosOption.get
-    })
+    }
+
+    !kingInCheck
   }
 
   def withTurn(color: Color) = copy(turn = color)

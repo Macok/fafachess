@@ -1,4 +1,4 @@
-package fafa.api
+package fafa
 
 import com.typesafe.config.ConfigFactory
 

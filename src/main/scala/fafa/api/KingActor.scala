@@ -11,8 +11,9 @@ class KingActor(piece: Piece,
 
   val onInitialPosition: Boolean = if (color.isWhite) pos == Pos.E1 else pos == Pos.E8
 
-  override lazy val possibleMovesNoKingSafetyFilter: List[Move] =
-    resolveMovesShortRange(role.mobilityVecs) ++ (if (onInitialPosition) castlingMoves else Nil)
+  override def possibleMovesNoKingSafetyFilter(allowCastling: Boolean): List[Move] =
+    resolveMovesShortRange(role.mobilityVecs) ++
+      (if (allowCastling && onInitialPosition && board.isKingSafe(color)) castlingMoves else Nil)
 
   private def castlingMoves = (if (color.isWhite) List(
     Move(Pos.E1, Pos.G1, castling = Some(Move(Pos.H1, Pos.F1))), // short castling for white
@@ -27,6 +28,7 @@ class KingActor(piece: Piece,
     val rookMove = move.castling.get
     if (piecemap.get(rookMove.from) contains Piece(color, Rook)) {
 
+      // squares between king and rook must be empty
       val squaresBetween =
         (if (rookMove.from.x < move.from.x) rookMove.from to move.from
         else move.from to rookMove.from).drop(1).dropRight(1)
@@ -35,6 +37,7 @@ class KingActor(piece: Piece,
         piecemap.get(_).isEmpty
       }
 
+      // neither piece can have moved
       val hasRookOrKingMoved = history map {
         _.to
       } exists Set(rookMove.from, move.from)
