@@ -2,14 +2,14 @@ package fafa.actor
 
 import akka.actor.{ActorRef, Actor}
 import fafa.messages.Message
-import fafa.protocol.UciProtocol
+import fafa.protocol.{Protocol, UciProtocol}
 
 /**
   * Created by mac on 06.01.16.
   */
 class ProtocolHandlerActor(engineActor: ActorRef) extends Actor {
   var ioActor: Option[ActorRef] = None
-  val protocol = new UciProtocol //todo allow protocol switch
+  val protocol: Protocol = new UciProtocol //todo allow protocol switch
 
   override def receive: Receive = {
     case ioActor: ActorRef => this.ioActor = Some(ioActor)

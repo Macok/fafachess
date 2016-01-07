@@ -11,6 +11,7 @@ class PosTest extends BaseTest {
 
   it should "detect when out of board" in {
     Pos.H8.addVector((1, 0)) shouldBe None
+    Pos.H8.addVector((0, 1)) shouldBe None
   }
 
   it should "calculate field ranges" in {

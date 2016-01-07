@@ -20,7 +20,7 @@ class IOActor(protocolHandler: ActorRef) extends Actor {
 
   override def preStart(): Unit = {
 
-    log.debug("IOActor preStart")
+    log.debug("IOActor start")
 
     Future {
       blocking {

@@ -5,7 +5,7 @@ import fafa.messages._
 /**
   * Created by mac on 06.01.16.
   */
-class UciProtocol {
+class UciProtocol extends Protocol {
 
   def serializeMessage(message: Message): String = message match {
     case m: ReadyOkMessage => "readyok"
