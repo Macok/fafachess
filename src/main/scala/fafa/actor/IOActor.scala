@@ -19,7 +19,6 @@ class IOActor(protocolHandler: ActorRef) extends Actor {
   val out: PrintStream = System.out
 
   override def preStart(): Unit = {
-
     log.debug("IOActor start")
 
     Future {
@@ -33,9 +32,11 @@ class IOActor(protocolHandler: ActorRef) extends Actor {
 
   override def receive: Receive = {
     case s: String if sender() == protocolHandler =>
+      log.debug("Engine -> GUI: " + s)
       out.println(s)
       out.flush()
     case s: String if sender() == self =>
+      log.debug("GUI -> Engine: " + s)
       protocolHandler ! s.trim
   }
 }
