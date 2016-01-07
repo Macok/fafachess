@@ -15,6 +15,8 @@ object FENNotation {
       King -> 'k',
       Pawn -> 'p')
 
+  val charToRole: Map[Char, Role] = FENNotation.roleChars.map(_.swap)
+
   def symbol(piece: Piece): Char = {
     val c = roleChars.get(piece.role).get
 

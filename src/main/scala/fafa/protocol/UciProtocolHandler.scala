@@ -1,6 +1,6 @@
 package fafa.protocol
 
-import fafa.api.{Board, Pos, Move}
+import fafa.api.{FENNotation, Board, Pos, Move}
 import fafa.messages._
 
 /**
@@ -29,14 +29,18 @@ class UciProtocolHandler extends ProtocolHandler {
   }
 
   def parseMove(moveStr: String): Move = {
-    val tokens = moveStr.grouped(2)
-    val positions = tokens map {
+    assert(moveStr.length == 4 || moveStr.length == 5)
+
+    val tokens = moveStr.grouped(2) toArray
+    val positions = tokens.take(2) map {
       Pos.fromString
-    } toArray
+    }
 
-    // todo promotions
+    val promoteTo =
+      if (tokens.length == 3) Some(FENNotation.charToRole(tokens(2).head))
+      else None
 
-    Move(positions(0), positions(1))
+    Move(positions(0), positions(1), promoteTo = promoteTo)
   }
 
   def parseMessage(inputLine: String): Option[Message] = inputLine match {

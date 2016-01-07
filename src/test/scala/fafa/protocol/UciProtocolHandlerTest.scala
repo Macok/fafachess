@@ -1,6 +1,7 @@
 package fafa.protocol
 
 import fafa.BaseTest
+import fafa.api.Role.Queen
 import fafa.api.{Board, Pos, Move}
 import fafa.messages._
 
@@ -41,6 +42,10 @@ class UciProtocolHandlerTest extends BaseTest {
         board.history shouldBe List()
       case _ => fail()
     }
+  }
+
+  it should "parse promoting moves" in {
+    uciHandler.parseMove("h7h8q") shouldBe Move(Pos.H7, Pos.H8, promoteTo = Some(Queen))
   }
 
 

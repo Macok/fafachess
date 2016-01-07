@@ -98,12 +98,11 @@ object Board {
 
   implicit def fromString(boardStr: String): Board = {
     val strippedBoardStr = boardStr.trim.stripMargin
-    val charToRole: Map[Char, Role] = FENNotation.roleChars.map(_.swap)
     val pieces =
       for (
         (line, lineIndex) <- strippedBoardStr.lines.zipWithIndex;
         (c, cIndex) <- line.zipWithIndex;
-        role <- charToRole.get(c.toLower)
+        role <- FENNotation.charToRole.get(c.toLower)
       ) yield {
         val color = if (c.isLower) Black else White
         val pos = Pos(cIndex, BoardSize - 1 - lineIndex)
