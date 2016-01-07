@@ -26,6 +26,15 @@ object Pos {
     else None
   }
 
+  def fromString(str: String): Pos = {
+    assert(str.length == 2)
+    val chars = str.toUpperCase.toCharArray
+    val pos = Pos(chars(0) - 'A', chars(1) - '1')
+    assert(posInsideBoard(pos))
+
+    pos
+  }
+
   def posInsideBoard(pos: Pos): Boolean = all.contains(pos)
 
   val A1 = Pos(0, 0)
