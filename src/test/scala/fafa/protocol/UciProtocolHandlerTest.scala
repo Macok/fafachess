@@ -35,6 +35,14 @@ class UciProtocolHandlerTest extends BaseTest {
 
   }
 
+  it should "parse position message without moves" in {
+    parseMessage("position startpos") match {
+      case Some(SetPositionMessage(board: Board)) =>
+        board.history shouldBe List()
+      case _ => fail()
+    }
+  }
+
 
   it should "serialize readyok message" in {
     serializeMessage(ReadyOkMessage()) shouldBe "readyok"

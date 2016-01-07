@@ -20,7 +20,6 @@ class UciProtocolHandler extends ProtocolHandler {
 
   def parsePositionMessage(s: String): Option[Message] = {
     val tokens = s.split(" ")
-    val positionStr = tokens.drop(1)(1)
 
     val moves = tokens.dropWhile(_ != "moves").drop(1) map parseMove
     val board = moves.foldLeft[Board](Board.initialSet)(_.move(_))
