@@ -9,14 +9,14 @@ abstract class Actor(piece: Piece,
                      val pos: Pos,
                      board: Board) {
 
-  def possibleMoves: List[Move] = {
-    potentialMoves filter {
-      !Config.filterMovesLeavingKingInCheck || board.move(_).isKingSafe(color)
+  lazy val possibleMoves: List[Move] = {
+    possibleMovesNoKingSafetyFilter filter {
+      board.move(_).isKingSafe(color)
     }
   }
 
   // possible moves without checking for king's safety
-  def potentialMoves: List[Move]
+  def possibleMovesNoKingSafetyFilter: List[Move]
 
   protected def occupiedByFriend(pos: Pos) = occupiedBy(pos, color)
 

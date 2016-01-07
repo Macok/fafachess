@@ -11,7 +11,7 @@ class KingActor(piece: Piece,
 
   val onInitialPosition: Boolean = if (color.isWhite) pos == Pos.E1 else pos == Pos.E8
 
-  override def potentialMoves: List[Move] =
+  override lazy val possibleMovesNoKingSafetyFilter: List[Move] =
     resolveMovesShortRange(role.mobilityVecs) ++ (if (onInitialPosition) castlingMoves else Nil)
 
   private def castlingMoves = (if (color.isWhite) List(

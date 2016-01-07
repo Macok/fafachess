@@ -10,7 +10,7 @@ class PawnActor(piece: Piece,
                 pos: Pos,
                 board: Board) extends Actor(piece, pos, board) {
 
-  override def potentialMoves: List[Move] = resolvePawnMoves
+  override lazy val possibleMovesNoKingSafetyFilter: List[Move] = resolvePawnMoves
 
   val direction = if (color.isWhite) 1 else -1
   val directionVec = (0, 1) * direction

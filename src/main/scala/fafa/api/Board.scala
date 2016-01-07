@@ -7,7 +7,7 @@ import Board._
 /**
   * Created by mac on 03.01.16.
   */
-case class Board(pieces: Map[Pos, Piece], history: List[Move] = List()) {
+case class Board(pieces: Map[Pos, Piece], history: List[Move] = List(), turn: Color = White) {
 
   val actors: Map[Pos, Actor] = pieces.map { case (pos, piece) => (pos, Actor(piece, pos, this)) }
 
@@ -15,10 +15,16 @@ case class Board(pieces: Map[Pos, Piece], history: List[Move] = List()) {
 
   def pieceAt(pos: Pos): Option[Piece] = pieces.get(pos)
 
-  lazy val allPossibleMoves = actors.values filter {
-    _.color == turn
-  } flatMap {
+  def color(color: Color): Iterable[Actor] = actors.values filter {
+    _.color == color
+  }
+
+  def allPossibleMoves = color(turn) flatMap {
     _.possibleMoves
+  }
+
+  def allPossibleMovesNoKingSafetyFilter = color(turn) flatMap {
+    _.possibleMovesNoKingSafetyFilter
   }
 
   def move(move: Move): Board =
@@ -29,7 +35,7 @@ case class Board(pieces: Map[Pos, Piece], history: List[Move] = List()) {
     val piece = pieces.get(move.from).get
     val newPiecemap: Map[Pos, Piece] = pieces - move.from -- move.capturing.toList + (move.to -> piece)
 
-    copy(newPiecemap, move :: history)
+    copy(newPiecemap, move :: history, turn = !turn)
   }
 
   private def castlingMove(move: Move) = {
@@ -42,7 +48,7 @@ case class Board(pieces: Map[Pos, Piece], history: List[Move] = List()) {
 
     val newPiecemap = pieces - move.from - rookMove.from + (move.to -> king) + (rookMove.to -> rook)
 
-    copy(pieces = newPiecemap, move :: history)
+    copy(pieces = newPiecemap, move :: history, turn = !turn)
   }
 
   def isKingSafe(color: Color): Boolean = {
@@ -51,25 +57,18 @@ case class Board(pieces: Map[Pos, Piece], history: List[Move] = List()) {
     }
     if (kingPosOption.isEmpty) return true // for testing convenience
 
-    val kingPos = kingPosOption.get
-
     !(actors.values flatMap {
-      _.potentialMoves
+      _.possibleMovesNoKingSafetyFilter
     } flatMap {
       _.capturing
-    } exists { _ == kingPos })
+    } exists {
+      _ == kingPosOption.get
+    })
   }
 
-  val lastMove = history.headOption
+  def withTurn(color: Color) = copy(turn = color)
 
-  val turn: Color =
-    if (lastMove.isEmpty) White
-    else {
-      if (pieceAt(lastMove.get.to).isEmpty) {
-        println(lastMove.get)
-      }
-      !pieceAt(lastMove.get.to).get.color
-    }
+  val lastMove = history.headOption
 
   override def toString: String = {
     (for (y <- (0 until BoardSize).reverse) yield {

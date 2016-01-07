@@ -7,5 +7,5 @@ class ShortRangeActor(piece: Piece,
                       pos: Pos,
                       board: Board) extends Actor(piece, pos, board) {
 
-  override def potentialMoves = resolveMovesShortRange(role.mobilityVecs)
+  override lazy val possibleMovesNoKingSafetyFilter = resolveMovesShortRange(role.mobilityVecs)
 }

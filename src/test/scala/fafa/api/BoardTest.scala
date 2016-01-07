@@ -47,8 +47,8 @@ class BoardTest extends ChessApiTest {
         |
       """ move Move(Pos.D2, Pos.D4)
 
-    boardAfterMove.pieces should be (Map[Pos, Piece](Pos.D4 -> Piece(White, Pawn)))
-    boardAfterMove.lastMove should be (Some(Move(Pos.D2, Pos.D4)))
+    boardAfterMove.pieces should be(Map[Pos, Piece](Pos.D4 -> Piece(White, Pawn)))
+    boardAfterMove.lastMove should be(Some(Move(Pos.D2, Pos.D4)))
   }
 
   it should "perform castling moves" in {
@@ -66,5 +66,58 @@ class BoardTest extends ChessApiTest {
 
     boardAfterMove pieceAt Pos.C1 shouldBe Some(Piece(White, King))
     boardAfterMove pieceAt Pos.D1 shouldBe Some(Piece(White, Rook))
+  }
+
+  it should "recognize king's position as safe" in {
+    """
+      |
+      |
+      |
+      |q
+      |
+      |
+      |PPPPPPPP
+      |R   KB R
+    """.isKingSafe(White) shouldBe true
+  }
+
+  it should "recognize check" in {
+    """
+      |
+      |
+      |
+      |q
+      |
+      |
+      |PPP PPPP
+      |R   KB R
+    """.isKingSafe(White) shouldBe false
+  }
+
+  it should "not allow moves leaving white king in check" in {
+    """
+      |
+      |
+      |
+      |q
+      |
+      |
+      |P   PPPP
+      |RB  KB R
+    """.allPossibleMoves shouldBe List(Move(Pos.E1, Pos.D1))
+  }
+
+  it should "not allow moves leaving black king in check" in {
+    """
+      |rnb k bnr
+      | p  Q
+      |       p
+      |     p
+      |
+      |   p
+      |P
+      |
+    """.withTurn(Black).allPossibleMoves shouldBe
+      List(Move(Pos.E8, Pos.E7, capturing = Some(Pos.E7)))
   }
 }

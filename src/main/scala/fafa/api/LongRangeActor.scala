@@ -7,7 +7,7 @@ class LongRangeActor(piece: Piece,
                      pos: Pos,
                      board: Board) extends Actor(piece, pos, board) {
 
-  override def potentialMoves = resolveMovesLongRange
+  override lazy val possibleMovesNoKingSafetyFilter = resolveMovesLongRange
 
   def resolveMovesLongRange: List[Move] = {
     val from = pos
