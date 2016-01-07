@@ -3,7 +3,7 @@ package fafa.actor
 import akka.actor.{ActorRef, Actor}
 import akka.actor.Actor.Receive
 import fafa.api.Board
-import fafa.messages.{BestMoveMessage, StartCalculatingMessage, ReadyOkMessage, IsReadyMessage}
+import fafa.messages.{BestMoveMessage, StartCalculationMessage, ReadyOkMessage, IsReadyMessage}
 
 /**
   * Created by mac on 06.01.16.
@@ -17,7 +17,7 @@ class EngineActor extends Actor {
   override def receive: Receive = {
     case actor: ActorRef => protocolHandlerActor = Some(actor)
     case m: IsReadyMessage => protocolHandlerActor.get ! ReadyOkMessage()
-    case m: StartCalculatingMessage =>
+    case m: StartCalculationMessage =>
       val bestMove = board.allPossibleMoves.head
       protocolHandlerActor.get ! BestMoveMessage(bestMove)
   }

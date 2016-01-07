@@ -6,7 +6,7 @@ import fafa.api.Board._
 /**
   * Created by mac on 05.01.16.
   */
-class BishopTest extends BaseTest {
+class BishopTest extends ChessApiTest {
   "Bishop" should "threat pieces at the same diagonal" in {
     val board =
       """

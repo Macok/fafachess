@@ -6,7 +6,7 @@ import fafa.api.Role.{Pawn, Queen}
 /**
   * Created by mac on 04.01.16.
   */
-class PawnTest extends BaseTest {
+class PawnTest extends ChessApiTest {
 
   "Pawn" should "threat pieces one square forward and to the left/right" in {
     val actor =

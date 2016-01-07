@@ -6,7 +6,7 @@ import fafa.api.Role.{Queen, Knight}
 /**
   * Created by mac on 04.01.16.
   */
-class QueenTest extends BaseTest {
+class QueenTest extends ChessApiTest {
 
   "Queen" should "threat pieces at the same rank, file or diagonal" in {
     val actor =

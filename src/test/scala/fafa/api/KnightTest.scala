@@ -6,7 +6,7 @@ import fafa.api.Role.{Knight, Rook}
 /**
   * Created by mac on 04.01.16.
   */
-class KnightTest extends BaseTest {
+class KnightTest extends ChessApiTest {
 
   "Knight" should "threat pieces in range" in {
     val actor =

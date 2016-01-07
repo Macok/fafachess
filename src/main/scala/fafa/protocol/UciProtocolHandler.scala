@@ -5,7 +5,7 @@ import fafa.messages._
 /**
   * Created by mac on 06.01.16.
   */
-class UciProtocol extends Protocol {
+class UciProtocolHandler extends ProtocolHandler {
 
   def serializeMessage(message: Message): String = message match {
     case m: ReadyOkMessage => "readyok"
@@ -14,7 +14,7 @@ class UciProtocol extends Protocol {
 
   def parseMessage(inputLine: String): Option[Message] = inputLine match {
     case "isready" => Some(IsReadyMessage())
-    case s: String if s.startsWith("go") => Some(StartCalculatingMessage())
+    case s: String if s.startsWith("go") => Some(StartCalculationMessage())
     case _ => None
   }
 }

@@ -3,7 +3,7 @@ package fafa.api
 /**
   * Created by mac on 06.01.16.
   */
-class PosTest extends BaseTest {
+class PosTest extends ChessApiTest {
 
   "Pos" should "print as field's name" in {
     Pos.G6.toString shouldBe "G6"

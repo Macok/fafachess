@@ -7,7 +7,7 @@ import fafa.api.Role.{King, Queen}
 /**
   * Created by mac on 04.01.16.
   */
-class KingTest extends BaseTest {
+class KingTest extends ChessApiTest {
 
   "King" should "threat pieces next to it" in {
     val actor =

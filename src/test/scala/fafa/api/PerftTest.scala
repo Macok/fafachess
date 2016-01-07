@@ -3,7 +3,7 @@ package fafa.api
 /**
   * Created by mac on 06.01.16.
   */
-class PerftTest extends BaseTest {
+class PerftTest extends ChessApiTest {
 
   "Board" should "resolve all possible moves for initial position" in {
     possibleMovesCount(1, List(Board.initialSet)) shouldBe 20

@@ -6,7 +6,7 @@ import fafa.api.Role.Rook
 /**
   * Created by mac on 04.01.16.
   */
-class RookTest extends BaseTest {
+class RookTest extends ChessApiTest {
 
   "Rook" should "threat pieces at the same rank or file" in {
     val actor =

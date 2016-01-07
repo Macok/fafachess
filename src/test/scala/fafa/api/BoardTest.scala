@@ -8,7 +8,7 @@ import org.scalatest.{FlatSpec, Matchers}
 /**
   * Created by mac on 03.01.16.
   */
-class BoardTest extends BaseTest {
+class BoardTest extends ChessApiTest {
 
   implicit def tupleToPiece(t: (Color, Role)): Piece = Piece(t._1, t._2)
 
