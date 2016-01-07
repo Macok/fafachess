@@ -2,6 +2,8 @@ package fafa.api
 
 import fafa.api.Board._
 import fafa.api.Role.{Pawn, Queen}
+import fafa.messages.SetPositionMessage
+import fafa.protocol.UciProtocolHandler
 
 /**
   * Created by mac on 04.01.16.

@@ -3,6 +3,8 @@ package fafa.api
 import fafa.api.Board._
 import fafa.api.Color.{Black, White}
 import fafa.api.Role._
+import fafa.messages.SetPositionMessage
+import fafa.protocol.UciProtocolHandler
 import org.scalatest.{FlatSpec, Matchers}
 
 /**
@@ -119,5 +121,18 @@ class BoardTest extends ChessApiTest {
       |
     """.withTurn(Black).allPossibleMoves shouldBe
       List(Move(Pos.E8, Pos.E7, capturing = Some(Pos.E7)))
+  }
+
+  it should "promote pawn after promoting move" in {
+    """
+      |
+      | P
+      |
+      |
+      |
+      |   p
+      |P
+      |
+    """.move(Move(Pos.B7, Pos.B8, promoteTo = Some(Queen))).pieceAt(Pos.B8).get.role shouldBe Queen
   }
 }

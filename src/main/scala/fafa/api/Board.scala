@@ -33,7 +33,8 @@ case class Board(pieces: Map[Pos, Piece], history: List[Move] = List(), turn: Co
 
   private def standardMove(move: Move) = {
     val piece = pieces.get(move.from).get
-    val newPiecemap: Map[Pos, Piece] = pieces - move.from -- move.capturing.toList + (move.to -> piece)
+    val newPiece = if (move.promoteTo.isDefined) piece.copy(role = move.promoteTo.get) else piece
+    val newPiecemap: Map[Pos, Piece] = pieces - move.from -- move.capturing.toList + (move.to -> newPiece)
 
     copy(newPiecemap, move :: history, turn = !turn)
   }
