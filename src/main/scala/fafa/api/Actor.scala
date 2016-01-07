@@ -42,7 +42,7 @@ object Actor {
   def apply(piece: Piece, pos: Pos, board: Board): Actor = piece.role match {
     case Pawn => new PawnActor(piece, pos, board)
     case King => new KingActor(piece, pos, board)
-    case Rook | Queen | Bishop => new LongRangeActor(piece, pos, board)
-    case _ => new ShortRangeActor(piece, pos, board)
+    case Knight => new KnightActor(piece, pos, board)
+    case _ => new LongRangeActor(piece, pos, board)
   }
 }
