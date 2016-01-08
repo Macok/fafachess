@@ -35,7 +35,10 @@ object Pos {
     pos
   }
 
-  def posInsideBoard(pos: Pos): Boolean = all.contains(pos)
+  def posInsideBoard(pos: Pos): Boolean = {
+    pos.x >= 0 && pos.x < Board.BoardSize &&
+      pos.y >= 0 && pos.y < Board.BoardSize
+  }
 
   val A1 = Pos(0, 0)
   val B1 = Pos(1, 0)
