@@ -57,20 +57,21 @@ case class Board(pieces: Map[Pos, Piece], history: List[Move] = List(), turn: Co
   }
 
   def isKingSafe(color: Color): Boolean = {
-    val kingPosOption = pieces.find(_._2 == Piece(color, King)) map {
-      _._1
-    }
-    if (kingPosOption.isEmpty) return true // for testing convenience
+    if (kingPos(color).isEmpty) return true // for testing convenience
 
     val kingInCheck = this.actorsOf(!color) flatMap {
       _.possibleMovesNoKingSafetyFilter(allowCastling = false)
     } flatMap {
       _.capturing
     } exists {
-      _ == kingPosOption.get
+      _ == kingPos(color).get
     }
 
     !kingInCheck
+  }
+
+  def kingPos(color: Color) = pieces.find(_._2 == Piece(color, King)) map {
+    _._1
   }
 
   def withTurn(color: Color) = copy(turn = color)

@@ -39,7 +39,7 @@ class PawnActor(piece: Piece,
       nextPos => board.lastMove.exists { move =>
         val from = nextPos.addVector(directionVec)
         val to = nextPos.addVector(-directionVec)
-
+        //todo sprawdzić czy to pionek
         from.isDefined && to.isDefined && move.from == from.get && move.to == to.get
       }
     } map { nextPos =>

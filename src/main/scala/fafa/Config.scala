@@ -8,4 +8,5 @@ import com.typesafe.config.ConfigFactory
 object Config {
   private val conf = ConfigFactory.load()
   val filterMovesLeavingKingInCheck = conf.getBoolean("fafa.filterMovesLeavingKingInCheck")
+  val minimaxDepth = conf.getInt("fafa.minimaxDepth")
 }

@@ -7,8 +7,8 @@ import PieceSquareTables._
   * Created by mac on 09.01.16.
   */
 object Evaluator {
-  def evaluate(board: Board): Int = {
-    evaluateColorPosition(board, board.turn) - evaluateColorPosition(board, !board.turn)
+  def evaluate(board: Board, color: Color): Int = {
+    evaluateColorPosition(board, color) - evaluateColorPosition(board, !color)
   }
 
   def evaluateColorPosition(board: Board, color: Color): Int = {
