@@ -15,15 +15,19 @@ case class Board(pieces: Map[Pos, Piece], history: List[Move] = List(), turn: Co
 
   def pieceAt(pos: Pos): Option[Piece] = pieces.get(pos)
 
-  def color(color: Color): Iterable[Actor] = actors.values filter {
+  def piecesOf(color: Color): Map[Pos, Piece] = pieces filter {
+    _._2.color == color
+  }
+
+  def actorsOf(color: Color): Iterable[Actor] = actors.values filter {
     _.color == color
   }
 
-  def allPossibleMoves = color(turn) flatMap {
+  def allPossibleMoves = actorsOf(turn) flatMap {
     _.possibleMoves
   }
 
-  def allPossibleMovesNoKingSafetyFilter = color(turn) flatMap {
+  def allPossibleMovesNoKingSafetyFilter = actorsOf(turn) flatMap {
     _.possibleMovesNoKingSafetyFilter()
   }
 
@@ -58,7 +62,7 @@ case class Board(pieces: Map[Pos, Piece], history: List[Move] = List(), turn: Co
     }
     if (kingPosOption.isEmpty) return true // for testing convenience
 
-    val kingInCheck = this.color(!color) flatMap {
+    val kingInCheck = this.actorsOf(!color) flatMap {
       _.possibleMovesNoKingSafetyFilter(allowCastling = false)
     } flatMap {
       _.capturing
