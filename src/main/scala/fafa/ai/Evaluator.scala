@@ -15,7 +15,7 @@ object Evaluator {
     board.piecesOf(color) map {
       case (pos: Pos, piece: Piece) =>
         val pieceSquareTable = pieceToPieceSquareTable.get(piece).get
-        pieceSquareTable(pos.x)(pos.y)
+        rolesValues(piece.role) + pieceSquareTable(pos.x)(pos.y)
     } sum
   }
 }
