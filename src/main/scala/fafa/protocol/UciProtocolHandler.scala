@@ -1,6 +1,7 @@
 package fafa.protocol
 
-import fafa.api.{FENNotation, Board, Pos, Move}
+import fafa.api.Role.Pawn
+import fafa.api._
 import fafa.messages._
 
 /**
@@ -21,26 +22,40 @@ class UciProtocolHandler extends ProtocolHandler {
   def parsePositionMessage(s: String): Option[Message] = {
     val tokens = s.split(" ")
 
-    val moves = tokens.dropWhile(_ != "moves").drop(1) map parseMove
-    val board = moves.foldLeft[Board](Board.initialSet)(_.move(_))
+    val movesTokens = tokens.dropWhile(_ != "moves").drop(1).iterator
 
     //todo parse startpos
+    val initBoard = Board.initialSet
+    val board = movesTokens.foldLeft[Board](initBoard) { (board: Board, moveToken: String) =>
+      board.move(parseMove(moveToken, board))
+    }
+
     Some(SetPositionMessage(board))
   }
 
-  def parseMove(moveStr: String): Move = {
-    assert(moveStr.length == 4 || moveStr.length == 5)
+  def parseMove(moveToken: String, board: Board): Move = {
+    assert(moveToken.length == 4 || moveToken.length == 5)
 
-    val tokens = moveStr.grouped(2) toArray
+    val tokens = moveToken.grouped(2) toArray
     val positions = tokens.take(2) map {
       Pos.fromString
     }
 
-    val promoteTo =
-      if (tokens.length == 3) Some(FENNotation.charToRole(tokens(2).head))
-      else None
+    val from = positions(0)
+    val to = positions(1)
+    val promoteTo = detectPromotion(tokens)
 
-    Move(positions(0), positions(1), promoteTo = promoteTo)
+    // instead of manually parsing the move, find it in actor's possible moves
+    val move = board.actorAt(from).get.possibleMoves.find(move => move.from == from && move.to == to)
+    if (move.isEmpty)
+      throw new Exception("could not parse illegal move: " + moveToken)
+
+    move.get.copy(promoteTo = promoteTo)
+  }
+
+  def detectPromotion(tokens: Array[String]): Option[Role] = {
+    if (tokens.length == 3) Some(FENNotation.charToRole(tokens(2).head))
+    else None
   }
 
   def parseMessage(inputLine: String): Option[Message] = inputLine match {

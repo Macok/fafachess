@@ -70,6 +70,23 @@ class BoardTest extends ChessApiTest {
     boardAfterMove pieceAt Pos.D1 shouldBe Some(Piece(White, Rook))
   }
 
+  it should "perform black king castling moves" in {
+    val boardAfterMove =
+      """
+        |r   k  r
+        |ppp  ppp
+        |   bbq
+        |   pp
+        |   nnP
+        |   PP PP
+        |PPP B  K
+        |RNBQ  NR
+      """ move Move(Pos.E8, Pos.C8, castling = Some(Move(Pos.A8, Pos.D8)))
+
+    boardAfterMove pieceAt Pos.C8 shouldBe Some(Piece(Black, King))
+    boardAfterMove pieceAt Pos.D8 shouldBe Some(Piece(Black, Rook))
+  }
+
   it should "recognize king's position as safe" in {
     """
       |

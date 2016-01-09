@@ -9,7 +9,7 @@ class PerftTest extends ChessApiTest {
     possibleMovesCount(1, Board.initialSet) shouldBe 20
     possibleMovesCount(2, Board.initialSet) shouldBe 400
     possibleMovesCount(3, Board.initialSet) shouldBe 8902
-    possibleMovesCount(4, Board.initialSet) shouldBe 197281
+    //possibleMovesCount(4, Board.initialSet) shouldBe 197281
   }
 
   def possibleMovesCount(plies: Int, board: Board): Int = {

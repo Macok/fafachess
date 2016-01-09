@@ -9,6 +9,17 @@ import MathUtils._
   */
 object PieceSquareTables {
 
+  /**
+    * todo add values
+    *
+    * P = 100
+    * N = 320
+    * B = 330
+    * R = 500
+    * Q = 900
+    * K = 20000
+    */
+
   val pawnTable: Array[Array[Int]] = Array[Int](
     0,  0,  0,  0,  0,  0,  0,  0,
     50, 50, 50, 50, 50, 50, 50, 50,

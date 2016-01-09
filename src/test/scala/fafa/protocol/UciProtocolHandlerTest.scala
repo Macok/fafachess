@@ -1,9 +1,10 @@
 package fafa.protocol
 
 import fafa.BaseTest
-import fafa.api.Role.Queen
+import fafa.api.Role.{Knight, Queen}
 import fafa.api.{Board, Pos, Move}
 import fafa.messages._
+import fafa.api.Board._
 
 /**
   * Created by mac on 07.01.16.
@@ -45,9 +46,36 @@ class UciProtocolHandlerTest extends BaseTest {
   }
 
   it should "parse promoting moves" in {
-    uciHandler.parseMove("h7h8q") shouldBe Move(Pos.H7, Pos.H8, promoteTo = Some(Queen))
+    val board =
+      """
+        |
+        |       P
+        |
+        |
+        |
+        |
+        |PPPPPPP
+        |RNBQKBNR
+      """
+
+    uciHandler.parseMove("h7h8n", board) shouldBe Move(Pos.H7, Pos.H8, promoteTo = Some(Knight))
   }
 
+  it should "parse en passant moves" in {
+    val boardAfterMove =
+      """
+        |rnbqkbnr
+        |pppppppp
+        |
+        |P
+        |
+        |
+        | PPPPPPP
+        |RNBQKBNR
+      """ move Move(Pos.B7, Pos.B5)
+
+    uciHandler.parseMove("a5b6", boardAfterMove) shouldBe Move(Pos.A5, Pos.B6, capturing = Some(Pos.B5))
+  }
 
   it should "serialize readyok message" in {
     serializeMessage(ReadyOkMessage()) shouldBe "readyok"
