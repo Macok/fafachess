@@ -6,12 +6,12 @@ import PieceSquareTables._
 /**
   * Created by mac on 09.01.16.
   */
-object Evaluator {
-  def evaluate(board: Board, color: Color): Int = {
-    evaluateColorPosition(board, color) - evaluateColorPosition(board, !color)
+case class Evaluator(board: Board) {
+  lazy val evaluate: Int = {
+    evaluateColorPosition(board.turn) - evaluateColorPosition(!board.turn)
   }
 
-  def evaluateColorPosition(board: Board, color: Color): Int = {
+  def evaluateColorPosition(color: Color): Int = {
     board.piecesOf(color) map {
       case (pos: Pos, piece: Piece) =>
         val pieceSquareTable = pieceToPieceSquareTable.get(piece).get

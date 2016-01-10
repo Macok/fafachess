@@ -49,7 +49,7 @@ class PawnActor(piece: Piece,
     }
 
     // include promotions
-    // todo allow weak promotions
+    // todo allow under-promotions
     (standardMoves ++ standardCapturingMoves ++ enPassantMoves) map {
       case move if isLastRank(move.to) => move.copy(promoteTo = Some(Queen))
       case move => move
