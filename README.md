@@ -1,6 +1,6 @@
 <h1>fafachess</h1>
 fafachess is a chess engine written for learning purposes, using Scala and Akka.
-The main focus is put on readability and clean design.
+The main focus is put on readability, testability and clean design.
 
 fafachess supports UCI protocol, making it easy to play against it using any of the popular GUI's like <a href="www.playwitharena.com">Arena Chess GUI</a>.
 
