@@ -8,14 +8,12 @@ import fafa.api.{Move, Board}
   */
 class Search(board: Board) {
 
-  val evaluator = Evaluator(board)
-
   var bestFoundMove: Option[Move] = None
 
   /**
     * Implementation of negamax algorithm to find best move
     */
-  def search(board: Board, depth: Int): Int = {
+  def negamax(board: Board, depth: Int): Int = {
     if (board.kingPos(board.turn).isEmpty) {
       //we lost todo przeniesc do evaluatora
       return -30000 + depth
@@ -27,7 +25,7 @@ class Search(board: Board) {
     }
 
     if (depth == Config.minimaxDepth) {
-      return evaluator.evaluate
+      return Evaluator.evaluate(board, board.turn)
     }
 
     val allPossibleMoves =
@@ -36,13 +34,11 @@ class Search(board: Board) {
 
     if (allPossibleMoves.isEmpty) {
       val mate = !board.isKingSafe(board.turn)
-      if (!mate)
-        return 0 //remis
-      else return -30000 + depth //przegrana
+      return if (!mate) 0 else -30000 + depth
     }
 
     val movesWithScores = allPossibleMoves map { move =>
-      move -> search(board.move(move), depth + 1)
+      move -> negamax(board.move(move), depth + 1)
     }
 
     val bestMoveWithScore = movesWithScores.maxBy {
@@ -55,7 +51,7 @@ class Search(board: Board) {
   }
 
   def search(): Move = {
-    search(board, 0)
+    negamax(board, 0)
     bestFoundMove.get
   }
 }
