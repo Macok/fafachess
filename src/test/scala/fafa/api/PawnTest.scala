@@ -87,6 +87,24 @@ class PawnTest extends ChessApiTest {
     ))
   }
 
+  it should "not capture en passant when other piece is not a pawn" in {
+    val actor =
+      """
+        |  r
+        |
+        |pP
+        |
+        |
+        |
+        |
+        |
+      """ move Move(Pos.C8, Pos.C6) actorAt Pos.B6 get
+
+    actor.possibleMoves.toSet should be(Set(
+      Move(Pos.B6, Pos.B7)
+    ))
+  }
+
   it should "get promotion at last rank" in {
     val actor =
       """

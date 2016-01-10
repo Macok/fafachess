@@ -1,7 +1,7 @@
 package fafa.api
 
 import Vec._
-import fafa.api.Role.Queen
+import fafa.api.Role.{Pawn, Queen}
 
 /**
   * Created by mac on 04.01.16.
@@ -36,11 +36,13 @@ class PawnActor(piece: Piece,
     val enPassantMoves = List((-1, 0), (1, 0)) map {
       _ + directionVec
     } flatMap pos.addVector filter {
-      nextPos => board.lastMove.exists { move =>
-        val from = nextPos.addVector(directionVec)
-        val to = nextPos.addVector(-directionVec)
-        //todo sprawdzić czy to pionek
-        from.isDefined && to.isDefined && move.from == from.get && move.to == to.get
+      nextPos => board.lastMove.exists { lastMove =>
+        val expectedLastMoveFrom = nextPos.addVector(directionVec)
+        val expectedLastMoveTo = nextPos.addVector(-directionVec)
+
+        expectedLastMoveFrom.isDefined && expectedLastMoveTo.isDefined &&
+          lastMove.from == expectedLastMoveFrom.get && lastMove.to == expectedLastMoveTo.get && // last move was two squares forward
+          piecemap.get(lastMove.to).get.role == Pawn // it was pawn's move
       }
     } map { nextPos =>
       Move(pos, nextPos, capturing = nextPos.addVector(-directionVec))
