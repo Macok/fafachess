@@ -11,5 +11,5 @@ fafachess supports UCI protocol, making it easy to play against it using any of 
 <li>support for all allowed moves including castling, en passant, and promotion.
 However, for efficiency reasons, under-promotion is not considered when searching for best move.</li>
 <li>best move search using simple minimax algorithm (will probably add alpha-beta pruning in the nearest future).</li>
-<li>evaluation based on material and <a href="https://chessprogramming.wikispaces.com/Piece-Square+tables">piece-square tables</a></li>
+<li>evaluation based on material and <a href="https://chessprogramming.wikispaces.com/Piece-Square+tables">piece-square tables.</a></li>
 </ul>
